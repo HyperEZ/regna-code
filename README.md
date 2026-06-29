@@ -44,7 +44,7 @@ For CI or scripted use, set `REGNA_API_KEY` directly; it takes priority over the
 |---|---|---|
 | `REGNA_API_KEY` | (none) | Regna API key. Optional once you have run `regna login`. When set, it overrides the stored credential (use for CI). |
 | `REGNA_BASE_URL` | `https://regnax.ai/v1` | Regna API base URL (OpenAI-compatible). Point this at a self-hosted endpoint for on-premise use. |
-| `REGNA_MODEL` | `regna/default` | Starting model pattern. |
+| `REGNA_MODEL` | `regna/regna-pro` | Starting model. The cloud catalog is `regna-basic`, `regna-pro`, `regna-max`. |
 | `REGNA_CODER_MODEL` | (none) | Exact model id that `/regna-coder` selects. |
 | `REGNA_GENERAL_MODEL` | (none) | Exact model id that `/regna-general` selects. |
 | `REGNA_EXPOSE_ALIASES` | (unset) | `1` also exposes path-style (slash) model ids. Hidden by default. Ids pinned via `REGNA_MODEL`/`REGNA_CODER_MODEL`/`REGNA_GENERAL_MODEL` are always shown. |
@@ -93,7 +93,7 @@ The egress guard is a defense layer, not a hard sandbox. Enforce real boundaries
 |---|---|
 | `401 status code` | Re-authenticate: `regna login`. |
 | Headless run hangs | Close stdin: `regna -p ... < /dev/null`. |
-| Only `regna/default` shows | Run `regna login`, or check `REGNA_BASE_URL`, then `/reload`. |
+| No Regna models show | Run `regna login`, or check `REGNA_BASE_URL`, then `/reload`. |
 | `[regna policy] blocked` | If legitimate, add `REGNA_ALLOW_HOSTS` or set `REGNA_POLICY=warn`/`off`. |
 | Missing extension/prompt, aborted | Reinstall. Fail-closed behavior is intentional. |
 | Runtime executable not found | Reinstall (`npm i -g @hyperez/regna-code`) or set `REGNA_ENGINE`. |

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import{spawn as w}from"node:child_process";import{fileURLToPath as b}from"node:url";import{dirname as E,join as o}from"node:path";import{existsSync as l,readFileSync as y,writeFileSync as S,mkdirSync as k,unlinkSync as P,chmodSync as L}from"node:fs";import{homedir as G}from"node:os";import{createRequire as U}from"node:module";import{createInterface as $}from"node:readline/promises";var I=E(b(import.meta.url)),u=E(I),f=o(u,"extensions"),v=o(u,"themes","regna.json"),h=o(u,"APPEND_SYSTEM.md"),T="https://regnax.ai/v1",N=o(G(),".regna"),m=o(N,"auth.json"),a=process.argv.slice(2),g=(...e)=>a.some(t=>e.some(n=>!!(t===n||t.startsWith(`${n}=`)||/^-[a-z]$/i.test(n)&&t.startsWith(n)&&t.length>n.length)));function A(){for(let e of[o(u,"package.json"),o(u,"..","package.json")])try{let t=JSON.parse(y(e,"utf8")).version;if(t)return`v${t}`}catch{}return""}var C=`Regna Code ${A()} - a terminal coding agent on Regna
+import{spawn as w}from"node:child_process";import{fileURLToPath as P}from"node:url";import{dirname as E,join as o}from"node:path";import{existsSync as l,readFileSync as A,writeFileSync as k,mkdirSync as N,unlinkSync as I,chmodSync as G}from"node:fs";import{homedir as L}from"node:os";import{createRequire as U}from"node:module";import{createInterface as $}from"node:readline/promises";var D=E(P(import.meta.url)),u=E(D),f=o(u,"extensions"),_=o(u,"themes","regna.json"),h=o(u,"APPEND_SYSTEM.md"),T="https://regnax.ai/v1",C="regna/regna-pro",R=o(L(),".regna"),m=o(R,"auth.json"),x=o(R,"engine"),a=process.argv.slice(2),g=(...e)=>a.some(r=>e.some(n=>!!(r===n||r.startsWith(`${n}=`)||/^-[a-z]$/i.test(n)&&r.startsWith(n)&&r.length>n.length)));function y(){for(let e of[o(u,"package.json"),o(u,"..","package.json")])try{let r=JSON.parse(A(e,"utf8")).version;if(r)return`v${r}`}catch{}return""}var O=`Regna Code ${y()} - a terminal coding agent on Regna
 
 Usage:
   regna [message...]                 start interactive, optionally with a first message
@@ -19,31 +19,31 @@ In-session commands:
 Environment:
   REGNA_API_KEY       Regna API key (optional once logged in)
   REGNA_BASE_URL      Regna API base URL (default https://regnax.ai/v1)
-  REGNA_MODEL         starting model (default regna/default)
+  REGNA_MODEL         starting model (default regna/regna-pro)
   REGNA_POLICY        network egress guard: off | warn | enforce
 
 Docs: https://github.com/HyperEZ/regna-code
-`;function R(){try{let e=JSON.parse(y(m,"utf8"));return e&&typeof e.apiKey=="string"?e:null}catch{return null}}function D(e,t){k(N,{recursive:!0}),S(m,`${JSON.stringify({apiKey:e,baseUrl:t},null,2)}
-`);try{L(m,384)}catch{}}function B(){try{return P(m),!0}catch{return!1}}function O(e){try{return`${new URL(e).origin}/console`}catch{return"https://regnax.ai/console"}}function j(e){try{let[t,n]=process.platform==="darwin"?["open",[e]]:process.platform==="win32"?["cmd",["/c","start","",e]]:["xdg-open",[e]];w(t,n,{stdio:"ignore",detached:!0}).unref()}catch{}}async function q(e,t){try{let n=new AbortController,s=setTimeout(()=>n.abort(),8e3),r=await fetch(`${e.replace(/\/+$/,"")}/models`,{headers:{Authorization:`Bearer ${t}`},signal:n.signal});return clearTimeout(s),r.status===401||r.status===403?"invalid":r.ok?"ok":"unknown"}catch{return"unknown"}}async function _(){let e=(process.env.REGNA_BASE_URL||"").trim()||R()?.baseUrl||T,t=O(e);process.stdout.write(`
-  Regna Code ${A()}
+`;function v(){try{let e=JSON.parse(A(m,"utf8"));return e&&typeof e.apiKey=="string"?e:null}catch{return null}}function B(e,r){N(R,{recursive:!0}),k(m,`${JSON.stringify({apiKey:e,baseUrl:r},null,2)}
+`);try{G(m,384)}catch{}}function j(){try{return I(m),!0}catch{return!1}}function q(e){try{return`${new URL(e).origin}/console`}catch{return"https://regnax.ai/console"}}function F(e){try{let[r,n]=process.platform==="darwin"?["open",[e]]:process.platform==="win32"?["cmd",["/c","start","",e]]:["xdg-open",[e]];w(r,n,{stdio:"ignore",detached:!0}).unref()}catch{}}async function K(e,r){try{let n=new AbortController,s=setTimeout(()=>n.abort(),8e3),t=await fetch(`${e.replace(/\/+$/,"")}/models`,{headers:{Authorization:`Bearer ${r}`},signal:n.signal});return clearTimeout(s),t.status===401||t.status===403?"invalid":t.ok?"ok":"unknown"}catch{return"unknown"}}async function b(){let e=(process.env.REGNA_BASE_URL||"").trim()||v()?.baseUrl||T,r=q(e);process.stdout.write(`
+  Regna Code ${y()}
   Log in to continue.
 
-  1) Get an API key at ${t}
+  1) Get an API key at ${r}
   2) Paste it below.
 
-`),j(t);let n=$({input:process.stdin,output:process.stdout}),s="";try{s=(await n.question("  API key: ")).trim()}finally{n.close()}s||(process.stderr.write(`  No key entered. Aborting.
-`),process.exit(1));let r=await q(e,s);return r==="invalid"&&(process.stderr.write(`  That key was rejected. Check it and run: regna login
-`),process.exit(1)),D(s,e),process.stdout.write(r==="ok"?`  Logged in.
+`),F(r);let n=$({input:process.stdin,output:process.stdout}),s="";try{s=(await n.question("  API key: ")).trim()}finally{n.close()}s||(process.stderr.write(`  No key entered. Aborting.
+`),process.exit(1));let t=await K(e,s);return t==="invalid"&&(process.stderr.write(`  That key was rejected. Check it and run: regna login
+`),process.exit(1)),B(s,e),process.stdout.write(t==="ok"?`  Logged in.
 
 `:`  Saved (could not verify right now).
 
-`),s}(g("--help","-h")||a[0]==="help")&&(process.stdout.write(C),process.exit(0));(g("--version")||a[0]==="version")&&(process.stdout.write(`Regna Code ${A()}
-`),process.exit(0));a[0]==="login"&&(await _(),process.exit(0));a[0]==="logout"&&(process.stdout.write(B()?`Logged out.
+`),s}(g("--help","-h")||a[0]==="help")&&(process.stdout.write(O),process.exit(0));(g("--version")||a[0]==="version")&&(process.stdout.write(`Regna Code ${y()}
+`),process.exit(0));a[0]==="login"&&(await b(),process.exit(0));a[0]==="logout"&&(process.stdout.write(j()?`Logged out.
 `:`Not logged in.
-`),process.exit(0));var d=(process.env.REGNA_API_KEY||"").trim();if(!d){let e=R();e?.apiKey&&(d=e.apiKey.trim(),!process.env.REGNA_BASE_URL&&e.baseUrl&&(process.env.REGNA_BASE_URL=e.baseUrl))}if(!d)if(process.stdin.isTTY&&process.stdout.isTTY){if(d=await _(),!process.env.REGNA_BASE_URL){let e=R();e?.baseUrl&&(process.env.REGNA_BASE_URL=e.baseUrl)}}else process.stderr.write(`[regna] Not logged in. Run: regna login
-`),process.exit(1);process.env.REGNA_API_KEY=d;var i=[],K=process.env.REGNA_DISCOVER==="1";if(!K){i.push("--no-extensions");let e=["provider","policy","branding","model","docs-search","docs-analysis"],t=r=>{let p=o(f,`${r}.js`);if(l(p))return p;let c=o(f,`${r}.ts`);return l(c)?c:null},n=e.map(r=>[r,t(r)]),s=n.filter(([,r])=>!r).map(([r])=>r);s.length>0&&(process.stderr.write(`[regna] Missing required extensions: ${s.join(", ")} (in ${f}). Install is corrupted. Aborting.
-`),process.exit(1));for(let[,r]of n)i.push("-e",r)}!g("--theme")&&l(v)&&i.push("--theme",v);g("--system-prompt")||(l(h)||(process.stderr.write(`[regna] Missing required prompt: APPEND_SYSTEM.md (${h}). Install is corrupted. Aborting.
+`),process.exit(0));var d=(process.env.REGNA_API_KEY||"").trim();if(!d){let e=v();e?.apiKey&&(d=e.apiKey.trim(),!process.env.REGNA_BASE_URL&&e.baseUrl&&(process.env.REGNA_BASE_URL=e.baseUrl))}if(!d)if(process.stdin.isTTY&&process.stdout.isTTY){if(d=await b(),!process.env.REGNA_BASE_URL){let e=v();e?.baseUrl&&(process.env.REGNA_BASE_URL=e.baseUrl)}}else process.stderr.write(`[regna] Not logged in. Run: regna login
+`),process.exit(1);process.env.REGNA_API_KEY=d;var i=[],Y=process.env.REGNA_DISCOVER==="1";if(!Y){i.push("--no-extensions");let e=["provider","policy","branding","model","docs-search","docs-analysis"],r=t=>{let p=o(f,`${t}.js`);if(l(p))return p;let c=o(f,`${t}.ts`);return l(c)?c:null},n=e.map(t=>[t,r(t)]),s=n.filter(([,t])=>!t).map(([t])=>t);s.length>0&&(process.stderr.write(`[regna] Missing required extensions: ${s.join(", ")} (in ${f}). Install is corrupted. Aborting.
+`),process.exit(1));for(let[,t]of n)i.push("-e",t)}!g("--theme")&&l(_)&&i.push("--theme",_);g("--system-prompt")||(l(h)||(process.stderr.write(`[regna] Missing required prompt: APPEND_SYSTEM.md (${h}). Install is corrupted. Aborting.
   (To set the prompt yourself on purpose, run with --system-prompt.)
-`),process.exit(1)),i.push("--append-system-prompt",`@${h}`));g("--model","-m")||i.push("--model",process.env.REGNA_MODEL||"regna/default");i.push(...a);var Y={...process.env,PI_OFFLINE:"1"};function F(){let e=process.env.REGNA_ENGINE;if(e)return{cmd:e,prefix:[],label:e};try{let n=U(import.meta.url).resolve("@earendil-works/pi-coding-agent/package.json"),s=E(n),r=JSON.parse(y(n,"utf8")),p=typeof r.bin=="string"?r.bin:r.bin?.pi;if(p){let c=o(s,p);if(l(c))return{cmd:process.execPath,prefix:[c],label:c}}}catch{}return{cmd:"pi",prefix:[],label:"runtime (PATH)"}}var{cmd:M,prefix:H,label:z}=F(),x=w(M,[...H,...i],{stdio:"inherit",env:Y});x.on("error",e=>{e&&e.code==="ENOENT"&&(process.stderr.write(`[regna] Runtime executable not found (${z}). Reinstall (npm i -g @hyperez/regna-code) or set REGNA_ENGINE.
+`),process.exit(1)),i.push("--append-system-prompt",`@${h}`));g("--model","-m")||i.push("--model",process.env.REGNA_MODEL||C);i.push(...a);try{N(x,{recursive:!0})}catch{}var M={...process.env,PI_OFFLINE:"1",PI_CODING_AGENT_DIR:x};function H(){let e=process.env.REGNA_ENGINE;if(e)return{cmd:e,prefix:[],label:e};try{let n=U(import.meta.url).resolve("@earendil-works/pi-coding-agent/package.json"),s=E(n),t=JSON.parse(A(n,"utf8")),p=typeof t.bin=="string"?t.bin:t.bin?.pi;if(p){let c=o(s,p);if(l(c))return{cmd:process.execPath,prefix:[c],label:c}}}catch{}return{cmd:"pi",prefix:[],label:"runtime (PATH)"}}var{cmd:z,prefix:J,label:V}=H(),S=w(z,[...J,...i],{stdio:"inherit",env:M});S.on("error",e=>{e&&e.code==="ENOENT"&&(process.stderr.write(`[regna] Runtime executable not found (${V}). Reinstall (npm i -g @hyperez/regna-code) or set REGNA_ENGINE.
 `),process.exit(127)),process.stderr.write(`[regna] Failed to start the runtime: ${e?.message??String(e)}
-`),process.exit(1)});x.on("exit",(e,t)=>{if(t){process.kill(process.pid,t);return}process.exit(e??0)});
+`),process.exit(1)});S.on("exit",(e,r)=>{if(r){process.kill(process.pid,r);return}process.exit(e??0)});
