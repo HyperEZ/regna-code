@@ -23,7 +23,7 @@ Then just run it. On first launch it asks how you want to connect:
     2) Offline  - air-gapped / self-hosted gateway
 ```
 
-- **Online**: opens https://regnax.ai/console, you paste an API key once. Default model `regna-pro`.
+- **Online**: opens https://regnax.ai/console, you paste an API key once. The cloud serves a single model, `regna-1`.
 - **Offline**: you enter your internal gateway URL (OpenAI-compatible `/v1`) and key, then pick a default model from whatever the gateway serves. Offline runs with no engine self-network and the egress guard enforced.
 
 Your choice and credentials are stored at `~/.regna/auth.json`. After that:
@@ -49,10 +49,8 @@ For CI or scripted use, set `REGNA_API_KEY` directly; it takes priority over the
 |---|---|---|
 | `REGNA_API_KEY` | (none) | Regna API key. Optional once you have run `regna login`. When set, it overrides the stored credential (use for CI). |
 | `REGNA_BASE_URL` | `https://regnax.ai/v1` | Regna API base URL (OpenAI-compatible). Point this at a self-hosted endpoint for on-premise use. |
-| `REGNA_MODEL` | `regna/regna-pro` | Starting model. The cloud catalog is `regna-basic`, `regna-pro`, `regna-max`. |
-| `REGNA_CODER_MODEL` | (none) | Exact model id that `/regna-coder` selects. |
-| `REGNA_GENERAL_MODEL` | (none) | Exact model id that `/regna-general` selects. |
-| `REGNA_EXPOSE_ALIASES` | (unset) | `1` also exposes path-style (slash) model ids. Hidden by default. Ids pinned via `REGNA_MODEL`/`REGNA_CODER_MODEL`/`REGNA_GENERAL_MODEL` are always shown. |
+| `REGNA_MODEL` | (auto) | Starting model. By default the current single cloud model is detected from the gateway automatically; set this to pin a specific id. |
+| `REGNA_EXPOSE_ALIASES` | (unset) | `1` also exposes path-style (slash) model ids. Hidden by default. The id pinned via `REGNA_MODEL` is always shown. |
 | `REGNA_POLICY` | `off` | Network egress guard: `off` / `warn` (notify, allow) / `enforce` (block external network tools). Set `enforce` for locked-down or air-gapped use. |
 | `REGNA_OFFLINE` | (unset) | `1` runs fully offline: the runtime skips all self-network, including the one-time download of search helpers (`fd`/`ripgrep`). They fall back to the built-in search. Use for air-gapped installs. |
 | `REGNA_ALLOW_HOSTS` | (none) | Extra allowed hosts (comma-separated) when the policy is on. URL or `host:port` accepted. |
@@ -70,8 +68,6 @@ For CI or scripted use, set `REGNA_API_KEY` directly; it takes priority over the
 | `regna logout` | Remove stored credentials. |
 | `/exit` | Exit Regna Code from inside a session. |
 | `/compact` | Compact the session context (also runs automatically as it fills). |
-| `/regna-coder` | Switch to a coding model (prefers an id containing `coder`, else default). |
-| `/regna-general` | Switch to a general model (prefers `instruct`, else default). |
 | `/regna-brand` | Toggle the Regna Code header/title branding. |
 | `/regna-docs <question>` | Document-grounded query. Searches indexed documents with `regna_docs_search`, answers using only retrieved evidence with `[source n]` citations, and says it does not know when there is no evidence. Requires `REGNA_DOCS_ENABLED=1`. |
 
