@@ -1,0 +1,81 @@
+{
+  "name": "regna",
+  "vars": {
+    "primary": "#3A43FF",
+    "indigo": "#6E78FF",
+    "blue": "#1A7EFF",
+    "magenta": "#EC4CFF",
+    "peri": "#8086FF",
+    "green": "#3DD68C",
+    "red": "#FF5C72",
+    "amber": "#F5B544",
+    "muted": "#8B90A6",
+    "dim": "#6B7188",
+    "line": "#3A3F52",
+    "lineSubtle": "#2A2E3D"
+  },
+  "colors": {
+    "accent": "indigo",
+    "border": "line",
+    "borderAccent": "blue",
+    "borderMuted": "lineSubtle",
+    "success": "green",
+    "error": "red",
+    "warning": "amber",
+    "muted": "muted",
+    "dim": "dim",
+    "text": "",
+    "thinkingText": "muted",
+
+    "selectedBg": "#23263A",
+    "userMessageBg": "#20233A",
+    "userMessageText": "",
+    "customMessageBg": "#1E2138",
+    "customMessageText": "",
+    "customMessageLabel": "indigo",
+    "toolPendingBg": "#1B1E2E",
+    "toolSuccessBg": "#17241C",
+    "toolErrorBg": "#2A1A20",
+    "toolTitle": "indigo",
+    "toolOutput": "",
+
+    "mdHeading": "blue",
+    "mdLink": "indigo",
+    "mdLinkUrl": "muted",
+    "mdCode": "magenta",
+    "mdCodeBlock": "",
+    "mdCodeBlockBorder": "line",
+    "mdQuote": "muted",
+    "mdQuoteBorder": "peri",
+    "mdHr": "line",
+    "mdListBullet": "blue",
+
+    "toolDiffAdded": "green",
+    "toolDiffRemoved": "red",
+    "toolDiffContext": "muted",
+
+    "syntaxComment": "dim",
+    "syntaxKeyword": "indigo",
+    "syntaxFunction": "blue",
+    "syntaxVariable": "peri",
+    "syntaxString": "green",
+    "syntaxNumber": "magenta",
+    "syntaxType": "blue",
+    "syntaxOperator": "muted",
+    "syntaxPunctuation": "muted",
+
+    "thinkingOff": "dim",
+    "thinkingMinimal": "muted",
+    "thinkingLow": "peri",
+    "thinkingMedium": "blue",
+    "thinkingHigh": "primary",
+    "thinkingXhigh": "magenta",
+
+    "bashMode": "amber"
+  },
+  "export": {
+    "pageBg": "#14151C",
+    "cardBg": "#1B1D2A",
+    "infoBg": "#23263A"
+  }
+}
