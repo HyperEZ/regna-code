@@ -117,3 +117,46 @@ patchEngineFile(
 	/addLoadedSection\("Themes", themeCompactList, themeList\);/,
 	"void 0;",
 );
+
+// The engine version these patches are written against. The package pins this exact version,
+// so a mismatch means something forced a different engine in. We verify and warn rather than
+// fail silently: if the engine's compiled shape changed, the patches above become no-ops.
+const KNOWN_ENGINE = "0.80.2";
+const IM = join("dist", "modes", "interactive", "interactive-mode.js");
+try {
+	const checks = [
+		{ file: join("dist", "config.js"), label: "terminal title", want: /APP_NAME\s*:\s*"Regna"/ },
+		{ file: IM, label: "/quit removed", absent: /if \(text === "\/quit"\)/ },
+		{ file: join("dist", "core", "slash-commands.js"), label: "/quit menu removed", absent: /name:\s*"quit"/ },
+		{ file: IM, label: "resume command name", want: /const args = \["regna"\];/ },
+		{ file: IM, label: "update banner/telemetry off", absent: /if \(process\.env\.PI_OFFLINE\) \{/ },
+		{ file: IM, label: "Extensions section hidden", absent: /addLoadedSection\("Extensions"/ },
+		{ file: IM, label: "Themes section hidden", absent: /addLoadedSection\("Themes"/ },
+	];
+	const failed = [];
+	for (const c of checks) {
+		const p = findEngineFile(c.file);
+		if (!p) {
+			failed.push(c.label);
+			continue;
+		}
+		const src = readFileSync(p, "utf8");
+		if (c.want && !c.want.test(src)) failed.push(c.label);
+		if (c.absent && c.absent.test(src)) failed.push(c.label);
+	}
+	if (failed.length > 0) {
+		let ver = "unknown";
+		try {
+			const pj = findEngineFile("package.json");
+			if (pj) ver = JSON.parse(readFileSync(pj, "utf8")).version || ver;
+		} catch {
+			/* ignore */
+		}
+		process.stderr.write(
+			`[regna] Note: some UI customizations did not apply (engine ${ver}, expected ${KNOWN_ENGINE}): ` +
+				`${failed.join(", ")}. Try reinstalling: npm i -g @hyperez/regna-code\n`,
+		);
+	}
+} catch {
+	/* verification is advisory only; never fail the install */
+}
