@@ -15,28 +15,33 @@ Regna Code is a thin client. The models, knowledge, and routing live behind the 
 npm i -g @hyperez/regna-code
 ```
 
-Then just run it. On first launch it walks you through login:
+Then just run it. On first launch it asks how you want to connect:
 
 ```
-regna                                      # logs in if needed, then starts interactive
+  Choose how to connect:
+    1) Online   - Regna cloud (regnax.ai)
+    2) Offline  - air-gapped / self-hosted gateway
+```
+
+- **Online**: opens https://regnax.ai/console, you paste an API key once. Default model `regna-pro`.
+- **Offline**: you enter your internal gateway URL (OpenAI-compatible `/v1`) and key, then pick a default model from whatever the gateway serves. Offline runs with no engine self-network and the egress guard enforced.
+
+Your choice and credentials are stored at `~/.regna/auth.json`. After that:
+
+```
+regna                                      # starts interactive
 regna "explain this repo"                  # with a prompt
 regna -p "summarize today's changes" < /dev/null   # headless/scripted (close stdin)
 ```
 
-`regna` opens https://regnax.ai/console, you paste an API key once, and it is stored at `~/.regna/auth.json`. No environment setup needed.
-
 ```
-regna login                                # (re)authenticate
+regna login                                # re-run the Online/Offline chooser
+regna login online                         # set up Online directly
+regna login offline                        # set up Offline directly
 regna logout                               # remove stored credentials
 ```
 
-By default Regna Code talks to the Regna cloud (`https://regnax.ai/v1`). To use a self-hosted or air-gapped deployment, point it at your own endpoint before logging in:
-
-```
-export REGNA_BASE_URL="http://<your-gateway>/v1"
-```
-
-For CI or scripted use, set `REGNA_API_KEY` directly; it takes priority over the stored login.
+For CI or scripted use, set `REGNA_API_KEY` directly; it takes priority over the stored login. Add `REGNA_OFFLINE=1` and `REGNA_BASE_URL` for non-interactive air-gapped use.
 
 ## Environment variables
 
