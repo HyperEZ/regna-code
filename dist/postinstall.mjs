@@ -26,6 +26,9 @@
  *      on first run) without re-enabling the update check or phoning telemetry home. Fully
  *      offline air-gapped use is then an explicit REGNA_OFFLINE=1 opt-in in the launcher.
  *
+ *   5) Hide the "Extensions" and "Themes" sections of the startup resource panel (internal
+ *      implementation detail). Context and Skills still show.
+ *
  * Best effort: every patch is wrapped so a failure (e.g. the engine changed its layout) just
  * leaves that aspect at the engine default and never fails the install. All patches are
  * idempotent and safe to run on every install.
@@ -100,4 +103,17 @@ patchEngineFile(
 	join("dist", "modes", "interactive", "interactive-mode.js"),
 	/if \(process\.env\.PI_OFFLINE\) \{/g,
 	"if (true) {",
+);
+
+// 5) Hide the "Extensions" and "Themes" sections from the startup resource panel. These are
+//    Regna Code internals the user does not need to see (Context and Skills still show).
+patchEngineFile(
+	join("dist", "modes", "interactive", "interactive-mode.js"),
+	/addLoadedSection\("Extensions", extensionCompactList, extList, "mdHeading"\);/,
+	"void 0;",
+);
+patchEngineFile(
+	join("dist", "modes", "interactive", "interactive-mode.js"),
+	/addLoadedSection\("Themes", themeCompactList, themeList\);/,
+	"void 0;",
 );
