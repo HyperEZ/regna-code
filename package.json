@@ -1,6 +1,6 @@
 {
   "name": "@hyperez/regna-code",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Regna Code. A terminal coding agent on Regna. Install with `npm i -g @hyperez/regna-code` and run `regna`. Works with the Regna cloud API and on-premise deployments.",
   "license": "PolyForm-Noncommercial-1.0.0",
   "private": false,
@@ -22,6 +22,9 @@
   },
   "bin": {
     "regna": "dist/bin/regna.mjs"
+  },
+  "scripts": {
+    "postinstall": "node dist/postinstall.mjs"
   },
   "files": [
     "dist",
