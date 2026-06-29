@@ -1,6 +1,6 @@
 {
   "name": "@hyperez/regna-code",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Regna Code. A terminal coding agent on Regna. Install with `npm i -g @hyperez/regna-code` and run `regna`. Works with the Regna cloud API and on-premise deployments.",
   "license": "PolyForm-Noncommercial-1.0.0",
   "private": false,
