@@ -1,7 +1,29 @@
 #!/usr/bin/env node
-import{spawn as N}from"node:child_process";import{fileURLToPath as v}from"node:url";import{dirname as l,join as i}from"node:path";import{existsSync as c,readFileSync as b}from"node:fs";import{createRequire as P}from"node:module";var R=l(v(import.meta.url)),d=l(R),u=i(d,"extensions"),h=i(d,"themes","regna.json"),a=i(d,"APPEND_SYSTEM.md"),g=process.argv.slice(2),f=(...r)=>g.some(t=>r.some(s=>!!(t===s||t.startsWith(`${s}=`)||/^-[a-z]$/i.test(s)&&t.startsWith(s)&&t.length>s.length))),o=[],y=process.env.REGNA_DISCOVER==="1";if(!y){o.push("--no-extensions");let r=["provider","policy","branding","model","docs-search","docs-analysis"],t=e=>{let p=i(u,`${e}.js`);if(c(p))return p;let n=i(u,`${e}.ts`);return c(n)?n:null},s=r.map(e=>[e,t(e)]),m=s.filter(([,e])=>!e).map(([e])=>e);m.length>0&&(process.stderr.write(`[regna] Missing required extensions: ${m.join(", ")} (in ${u}). Install is corrupted. Aborting.
-`),process.exit(1));for(let[,e]of s)o.push("-e",e)}!f("--theme")&&c(h)&&o.push("--theme",h);f("--system-prompt")||(c(a)||(process.stderr.write(`[regna] Missing required prompt: APPEND_SYSTEM.md (${a}). Install is corrupted. Aborting.
+import{spawn as A}from"node:child_process";import{fileURLToPath as x}from"node:url";import{dirname as f,join as n}from"node:path";import{existsSync as c,readFileSync as E}from"node:fs";import{createRequire as b}from"node:module";var w=f(x(import.meta.url)),p=f(w),m=n(p,"extensions"),h=n(p,"themes","regna.json"),g=n(p,"APPEND_SYSTEM.md"),l=process.argv.slice(2),d=(...e)=>l.some(s=>e.some(t=>!!(s===t||s.startsWith(`${t}=`)||/^-[a-z]$/i.test(t)&&s.startsWith(t)&&s.length>t.length)));function R(){for(let e of[n(p,"package.json"),n(p,"..","package.json")])try{let s=JSON.parse(E(e,"utf8")).version;if(s)return`v${s}`}catch{}return""}var y=`Regna Code ${R()} - a terminal coding agent on Regna
+
+Usage:
+  regna [message...]                 start interactive, optionally with a first message
+  regna "explain this repo"          run with a prompt
+  regna -p "summarize changes" < /dev/null   headless/scripted (close stdin)
+
+In-session commands:
+  /regna-coder        switch to a coding model
+  /regna-general      switch to a general model
+  /regna-brand        toggle the Regna Code branding
+  /regna-docs <q>     document-grounded query (requires REGNA_DOCS_ENABLED=1)
+
+Key environment variables:
+  REGNA_API_KEY       Regna API key (required)
+  REGNA_BASE_URL      Regna API base URL (default https://regnax.ai/v1)
+  REGNA_MODEL         starting model (default regna/default)
+  REGNA_POLICY        network egress guard: off | warn | enforce
+  REGNA_OFFLINE=1     air-gapped mode (block the runtime's own outbound network)
+
+Docs: https://github.com/HyperEZ/regna-code
+`;(d("--help","-h")||l[0]==="help")&&(process.stdout.write(y),process.exit(0));(d("--version")||l[0]==="version")&&(process.stdout.write(`Regna Code ${R()}
+`),process.exit(0));var o=[],P=process.env.REGNA_DISCOVER==="1";if(!P){o.push("--no-extensions");let e=["provider","policy","branding","model","docs-search","docs-analysis"],s=r=>{let a=n(m,`${r}.js`);if(c(a))return a;let i=n(m,`${r}.ts`);return c(i)?i:null},t=e.map(r=>[r,s(r)]),u=t.filter(([,r])=>!r).map(([r])=>r);u.length>0&&(process.stderr.write(`[regna] Missing required extensions: ${u.join(", ")} (in ${m}). Install is corrupted. Aborting.
+`),process.exit(1));for(let[,r]of t)o.push("-e",r)}!d("--theme")&&c(h)&&o.push("--theme",h);d("--system-prompt")||(c(g)||(process.stderr.write(`[regna] Missing required prompt: APPEND_SYSTEM.md (${g}). Install is corrupted. Aborting.
   (To set the prompt yourself on purpose, run with --system-prompt.)
-`),process.exit(1)),o.push("--append-system-prompt",`@${a}`));f("--model","-m")||o.push("--model",process.env.REGNA_MODEL||"regna/default");o.push(...g);var E={...process.env};process.env.REGNA_OFFLINE==="1"&&(E.PI_OFFLINE="1");function A(){let r=process.env.REGNA_ENGINE;if(r)return{cmd:r,prefix:[],label:r};try{let s=P(import.meta.url).resolve("@earendil-works/pi-coding-agent/package.json"),m=l(s),e=JSON.parse(b(s,"utf8")),p=typeof e.bin=="string"?e.bin:e.bin?.pi;if(p){let n=i(m,p);if(c(n))return{cmd:process.execPath,prefix:[n],label:n}}}catch{}return{cmd:"pi",prefix:[],label:"runtime (PATH)"}}var{cmd:S,prefix:$,label:I}=A(),x=N(S,[...$,...o],{stdio:"inherit",env:E});x.on("error",r=>{r&&r.code==="ENOENT"&&(process.stderr.write(`[regna] Runtime executable not found (${I}). Reinstall (npm i -g @hyperez/regna-code) or set REGNA_ENGINE.
-`),process.exit(127)),process.stderr.write(`[regna] Failed to start the runtime: ${r?.message??String(r)}
-`),process.exit(1)});x.on("exit",(r,t)=>{if(t){process.kill(process.pid,t);return}process.exit(r??0)});
+`),process.exit(1)),o.push("--append-system-prompt",`@${g}`));d("--model","-m")||o.push("--model",process.env.REGNA_MODEL||"regna/default");o.push(...l);var N={...process.env};process.env.REGNA_OFFLINE==="1"&&(N.PI_OFFLINE="1");function _(){let e=process.env.REGNA_ENGINE;if(e)return{cmd:e,prefix:[],label:e};try{let t=b(import.meta.url).resolve("@earendil-works/pi-coding-agent/package.json"),u=f(t),r=JSON.parse(E(t,"utf8")),a=typeof r.bin=="string"?r.bin:r.bin?.pi;if(a){let i=n(u,a);if(c(i))return{cmd:process.execPath,prefix:[i],label:i}}}catch{}return{cmd:"pi",prefix:[],label:"runtime (PATH)"}}var{cmd:G,prefix:I,label:k}=_(),v=A(G,[...I,...o],{stdio:"inherit",env:N});v.on("error",e=>{e&&e.code==="ENOENT"&&(process.stderr.write(`[regna] Runtime executable not found (${k}). Reinstall (npm i -g @hyperez/regna-code) or set REGNA_ENGINE.
+`),process.exit(127)),process.stderr.write(`[regna] Failed to start the runtime: ${e?.message??String(e)}
+`),process.exit(1)});v.on("exit",(e,s)=>{if(s){process.kill(process.pid,s);return}process.exit(e??0)});
