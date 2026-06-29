@@ -62,6 +62,7 @@ For CI or scripted use, set `REGNA_API_KEY` directly; it takes priority over the
 |---|---|
 | `regna login` | Log in to Regna and store your API key at `~/.regna/auth.json`. |
 | `regna logout` | Remove stored credentials. |
+| `/exit` | Exit Regna Code from inside a session (same as `/quit`). |
 | `/regna-coder` | Switch to a coding model (prefers an id containing `coder`, else default). |
 | `/regna-general` | Switch to a general model (prefers `instruct`, else default). |
 | `/regna-brand` | Toggle the Regna Code header/title branding. |
