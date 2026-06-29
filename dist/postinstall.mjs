@@ -15,6 +15,11 @@
  *      entry from the built-in slash-command menu and neutralize its handler so /quit no longer
  *      triggers shutdown (Ctrl+C/Ctrl+D still exit).
  *
+ *   3) Resume hint. On exit the engine prints "To resume this session: <prog> --session <id>"
+ *      where <prog> is APP_NAME ("pi"). We rewrite that one program token to "regna" so the
+ *      printed command actually works as typed. The session dir is the isolated Regna one, so
+ *      `regna --session <id>` resumes correctly with no extra flags.
+ *
  * Best effort: every patch is wrapped so a failure (e.g. the engine changed its layout) just
  * leaves that aspect at the engine default and never fails the install. All patches are
  * idempotent and safe to run on every install.
@@ -75,4 +80,11 @@ patchEngineFile(
 	join("dist", "modes", "interactive", "interactive-mode.js"),
 	/if\s*\(\s*text\s*===\s*"\/quit"\s*\)/,
 	'if (text === "/__regna_quit_removed__")',
+);
+
+// 3) Resume hint program name: "<pi> --session <id>" -> "regna --session <id>".
+patchEngineFile(
+	join("dist", "modes", "interactive", "interactive-mode.js"),
+	/const args = \[APP_NAME\];/,
+	'const args = ["regna"];',
 );
