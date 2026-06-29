@@ -49,6 +49,7 @@ For CI or scripted use, set `REGNA_API_KEY` directly; it takes priority over the
 | `REGNA_GENERAL_MODEL` | (none) | Exact model id that `/regna-general` selects. |
 | `REGNA_EXPOSE_ALIASES` | (unset) | `1` also exposes path-style (slash) model ids. Hidden by default. Ids pinned via `REGNA_MODEL`/`REGNA_CODER_MODEL`/`REGNA_GENERAL_MODEL` are always shown. |
 | `REGNA_POLICY` | `off` | Network egress guard: `off` / `warn` (notify, allow) / `enforce` (block external network tools). Set `enforce` for locked-down or air-gapped use. |
+| `REGNA_OFFLINE` | (unset) | `1` runs fully offline: the runtime skips all self-network, including the one-time download of search helpers (`fd`/`ripgrep`). They fall back to the built-in search. Use for air-gapped installs. |
 | `REGNA_ALLOW_HOSTS` | (none) | Extra allowed hosts (comma-separated) when the policy is on. URL or `host:port` accepted. |
 | `REGNA_DISCOVER` | (unset) | `1` lets the runtime auto-discover extensions instead of loading the verified set explicitly. |
 | `REGNA_ENGINE` | (bundled) | Override the path to the runtime executable. Resolved from the bundled dependency by default. |
@@ -80,11 +81,12 @@ When enabled, two features turn on. Use them only where the backend's retrieval 
 
 ## Air-gapped mode
 
-The runtime never phones home (no update checks or self-network), so Regna Code runs fully offline against a self-hosted deployment. Set:
+Regna Code does no update checks and sends no telemetry. By default it is online only for Regna API calls and a one-time download of its search helpers (`fd`/`ripgrep`). For a fully offline, self-hosted deployment, set:
 
 ```
 export REGNA_BASE_URL="http://<your-gateway>/v1"
-export REGNA_POLICY=enforce   # block external network tools; allow the gateway, localhost, and private/internal ranges
+export REGNA_OFFLINE=1         # skip all engine self-network (search helpers fall back to the built-in search)
+export REGNA_POLICY=enforce    # block external network tools; allow the gateway, localhost, and private/internal ranges
 ```
 
 The egress guard is a defense layer, not a hard sandbox. Enforce real boundaries with OS and network controls and an internal mirror.

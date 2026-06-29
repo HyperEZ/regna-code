@@ -20,6 +20,12 @@
  *      printed command actually works as typed. The session dir is the isolated Regna one, so
  *      `regna --session <id>` resumes correctly with no extra flags.
  *
+ *   4) Disable the update banner and the install telemetry to pi.dev unconditionally. Both are
+ *      guarded by the same `if (process.env.PI_OFFLINE)` early-return, so we force that guard to
+ *      always take. This lets us run online by default (so search helpers fd/ripgrep download
+ *      on first run) without re-enabling the update check or phoning telemetry home. Fully
+ *      offline air-gapped use is then an explicit REGNA_OFFLINE=1 opt-in in the launcher.
+ *
  * Best effort: every patch is wrapped so a failure (e.g. the engine changed its layout) just
  * leaves that aspect at the engine default and never fails the install. All patches are
  * idempotent and safe to run on every install.
@@ -53,8 +59,7 @@ function patchEngineFile(relInsidePackage, re, replacement) {
 		const path = findEngineFile(relInsidePackage);
 		if (!path) return;
 		const src = readFileSync(path, "utf8");
-		if (!re.test(src)) return; // already patched or layout changed
-		const out = src.replace(re, replacement);
+		const out = src.replace(re, replacement); // no-op if pattern absent (already patched)
 		if (out !== src) writeFileSync(path, out);
 	} catch {
 		/* best effort; never fail the install */
@@ -87,4 +92,12 @@ patchEngineFile(
 	join("dist", "modes", "interactive", "interactive-mode.js"),
 	/const args = \[APP_NAME\];/,
 	'const args = ["regna"];',
+);
+
+// 4) Force-disable the update banner + pi.dev install telemetry (both gated by the same guard),
+//    independent of PI_OFFLINE, so online-by-default does not re-enable them.
+patchEngineFile(
+	join("dist", "modes", "interactive", "interactive-mode.js"),
+	/if \(process\.env\.PI_OFFLINE\) \{/g,
+	"if (true) {",
 );
