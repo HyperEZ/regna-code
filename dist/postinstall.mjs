@@ -29,6 +29,9 @@
  *   5) Hide the "Extensions" and "Themes" sections of the startup resource panel (internal
  *      implementation detail). Context and Skills still show.
  *
+ *   6) De-brand the base system prompt so the model identifies as Regna Code, not the engine:
+ *      rewrite the "operating inside <engine>" identity line and remove the engine-docs block.
+ *
  * Best effort: every patch is wrapped so a failure (e.g. the engine changed its layout) just
  * leaves that aspect at the engine default and never fails the install. All patches are
  * idempotent and safe to run on every install.
@@ -118,6 +121,21 @@ patchEngineFile(
 	"void 0;",
 );
 
+// 6) De-brand the base system prompt. The engine tells the model it is "operating inside pi,
+//    a coding agent harness" and appends a whole "Pi documentation" section, which makes the
+//    model identify as pi. Rewrite the identity line and drop the pi-docs block (Regna hides
+//    the engine, so that block is pure leakage with no user value).
+patchEngineFile(
+	join("dist", "core", "system-prompt.js"),
+	/operating inside pi, a coding agent harness/,
+	"operating inside Regna Code, a terminal coding agent",
+);
+patchEngineFile(
+	join("dist", "core", "system-prompt.js"),
+	/\n\nPi documentation \(read only when the user asks about pi[\s\S]*?tui\.md for TUI API details\)/,
+	"",
+);
+
 // The engine version these patches are written against. The package pins this exact version,
 // so a mismatch means something forced a different engine in. We verify and warn rather than
 // fail silently: if the engine's compiled shape changed, the patches above become no-ops.
@@ -132,6 +150,8 @@ try {
 		{ file: IM, label: "update banner/telemetry off", absent: /if \(process\.env\.PI_OFFLINE\) \{/ },
 		{ file: IM, label: "Extensions section hidden", absent: /addLoadedSection\("Extensions"/ },
 		{ file: IM, label: "Themes section hidden", absent: /addLoadedSection\("Themes"/ },
+		{ file: join("dist", "core", "system-prompt.js"), label: "system-prompt de-branded", absent: /operating inside pi,/ },
+		{ file: join("dist", "core", "system-prompt.js"), label: "pi docs block removed", absent: /Pi documentation \(read only/ },
 	];
 	const failed = [];
 	for (const c of checks) {
